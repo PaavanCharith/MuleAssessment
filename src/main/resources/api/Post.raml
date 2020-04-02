@@ -1,0 +1,18 @@
+#%RAML 1.0
+title: Post API
+baseUri: http://localhost/api
+version: v1
+/employee:
+  description: HRMS EMPLOYEE.
+  post:
+    description: Add a new Employee profile.
+    body:
+      application/json:
+        example:  |
+          {"employee":{"id":"A007","first_name":"Jan","last_name":"Doe"}}
+    responses:
+      201:
+        body:
+          application/text:
+            example:  |
+              Jan Doe employee profile is created in HRMS System.

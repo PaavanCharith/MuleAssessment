@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:http="http://www.mulesoft.org/schema/mule/http" xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core"
+	xmlns="http://www.mulesoft.org/schema/mule/core"
+	xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd
+http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd">
+	<flow name="InvokeJavaClassFlow" doc:id="30c63956-95e9-4247-ab6d-b42028f83dc5" >
+		<http:listener doc:name="Listener" doc:id="51c649b8-d439-4463-ac27-1d3b0e7ff39d" config-ref="HTTP_Listener_config" path="/camel"/>
+		<set-variable value="#[payload]" doc:name="Set Variable" doc:id="7c9dd3e5-18a2-4651-a08c-65c8115545f1" variableName="val"/>
+		<ee:transform doc:name="Transform Message" doc:id="12c64e92-7ec9-4c32-ae10-1211db4607fc">
+			<ee:message>
+				<ee:set-payload><![CDATA[%dw 2.0
+import java!newapp::CFG
+output application/json
+---
+{
+	CamelCase: CFG::getCamelCase()
+}]]></ee:set-payload>
+			</ee:message>
+		</ee:transform>
+	</flow>
+</mule>

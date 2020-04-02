@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" xmlns:http="http://www.mulesoft.org/schema/mule/http"
+	xmlns="http://www.mulesoft.org/schema/mule/core"
+	xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd
+http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd">
+	<flow name="joinsFlow" doc:id="6283e42a-55a0-4aff-bfbf-f3dfb179fa11" >
+		<http:listener doc:name="Listener" doc:id="4965a2f7-7abd-4513-b86f-fb4ee2336da2" config-ref="HTTP_Listener_config" path="/joins"/>
+		<set-variable value='#[{
+	"employee": [{
+		"id": "A007",
+		"first_name": "Jan",
+		"last_name": "Doe"
+	}, {
+		"id": "A008",
+		"first_name": "Ron",
+		"last_name ": "David "
+	}, {
+		"id": "A011",
+		"first_name": "Kelly",
+		"last_name": "Mitch"
+	}, {
+		"id": "A012",
+		"first_name": "Chris",
+		"last_name": "Vaste"
+	}]
+}]' doc:name="Set Variable" doc:id="a32566a2-5d88-437b-b060-849458fbd3e4" variableName="var1"/>
+		<set-variable value='#[{
+	"scoreBoard": [{
+		"id": "A007",
+		"subjects": ["Maths", "English", "Arts", "Drawimgs"],
+		"score": [80, 75, 89, 100]
+	}, {
+		"id": "A008",
+		"subjects": ["Maths", "English", "Arts", "Drawimgs"],
+		"score": [70, 85, 69, 90]
+	}, {
+		"id": "A021 ",
+		"subjects ": [
+			"Maths ",
+			"English ",
+			"Arts ",
+			"Drawimgs "
+		],
+		"score ": [90, 87, 77, 95]
+	}]
+}]' doc:name="Set Variable" doc:id="08a5eb63-a902-4739-a2b4-0df299e37ad4" variableName="var2"/>
+		<ee:transform doc:name="Transform Message" doc:id="f39a0900-363a-40ca-940d-042bdd421913" >
+			<ee:message >
+				<ee:set-payload ><![CDATA[%dw 2.0
+output application/json
+---
+{
+	certificate: (vars.var1.employee map( employee , indexOfEmployee ) -> {
+		id: employee.id,
+		firstName: employee.first_name,
+		LastName: employee.last_name, (vars.var2.scoreBoard filter ($.id == employee.id) map( scoreBoard , indexOfScoreBoard ) -> {
+		MarksBySubjectWise: {
+				"Maths ": scoreBoard.score[0],
+				"English ": scoreBoard.score[1],
+				"Arts ": scoreBoard.score[2],
+			"Drawings ": scoreBoard.score[3]
+		}
+	})
+	}
+	)
+	}
+]]></ee:set-payload>
+			</ee:message>
+		</ee:transform>
+	</flow>
+</mule>

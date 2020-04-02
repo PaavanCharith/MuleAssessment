@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" xmlns:http="http://www.mulesoft.org/schema/mule/http"
+	xmlns="http://www.mulesoft.org/schema/mule/core"
+	xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd
+http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd">
+	<flow name="ArrayFlow" doc:id="f775714b-52bb-4516-a3b3-e9efc42de5f1" >
+		<http:listener doc:name="Listener" doc:id="be44e739-ff38-4721-8f89-efb042111d43" config-ref="HTTP_Listener_config" path="/{Name}"/>
+		<set-variable value="#[attributes.uriParams.Name]" doc:name="Set Variable" doc:id="4a47c889-e7e3-45c7-aa7f-ee38fe1c5e14" variableName="val"/>
+		<ee:transform doc:name="Transform Message" doc:id="d186a19a-e1a6-4f29-8ec3-934b666c2216" >
+			<ee:message >
+				<ee:set-payload ><![CDATA[%dw 2.0
+
+output application/json
+
+---
+
+1 to ((vars.val default 10)) map $]]></ee:set-payload>
+			</ee:message>
+			<ee:variables >
+				<ee:set-variable variableName="List" ><![CDATA[%dw 2.0
+output application/java
+---
+[]]]></ee:set-variable>
+			</ee:variables>
+		</ee:transform>
+	</flow>
+</mule>

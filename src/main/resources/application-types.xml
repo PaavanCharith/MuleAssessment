@@ -1,0 +1,23 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<types:mule xmlns:types="http://www.mulesoft.org/schema/mule/types">
+  <types:catalog>
+    <types:type name="response" format="json">
+      <types:shape format="weave" example="examples/Joins-1.json"><![CDATA[%dw 2.0
+
+type response = {|
+  certificate: Array<{|    id: String,     firstName: String,     LastName: String,     MarksBySubjectWise: {|      "Maths ": Number {"typeId": "int"},       "English ": Number {"typeId": "int"},       "Arts ": Number {"typeId": "int"},       "Drawings ": Number {"typeId": "int"}    |},     "id ": String,     "firstName ": String,     "astName ": String,     "MarksBySubjectWise ": {|      "Maths ": Number {"typeId": "int"},       "English ": Number {"typeId": "int"},       "Arts ": Number {"typeId": "int"},       "Drawings ": Number {"typeId": "int"}    |}  |}>
+|} {"example": "{\\\"certificate\\\":[{\\\"id\\\":\\\"XXX\\\",\\\"firstName\\\":\\\"XXX\\\",\\\"LastName\\\":\\\"YYY\\\",\\\"MarksBySubjectWise\\\":{\\\"Maths \\\":80,\\\"English \\\":90,\\\"Arts \\\":89,\\\"Drawings \\\":100}},{\\\"id \\\":\\\"XXX \\\",\\\"firstName \\\":\\\"XXX \\\",\\\"astName \\\":\\\"YYY \\\",\\\"MarksBySubjectWise \\\":{\\\"Maths \\\":60,\\\"English \\\":80,\\\"Arts \\\":99,\\\"Drawings \\\":50}}]}"}
+
+]]></types:shape>
+    </types:type>
+  </types:catalog>
+  <types:enrichment select="#f39a0900-363a-40ca-940d-042bdd421913">
+    <types:processor-declaration>
+      <types:output-event>
+        <types:message>
+          <types:payload type="response"/>
+        </types:message>
+      </types:output-event>
+    </types:processor-declaration>
+  </types:enrichment>
+</types:mule>
